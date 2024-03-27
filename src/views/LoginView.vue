@@ -1,4 +1,11 @@
 <script setup>
+    import { useForm,useField } from 'vee-validate';
+
+    const  { handleSubmit, errors } = useForm();
+    const email = useField( "email" );
+    const password = useField( "password" );
+
+    console.log(email)
 
 </script>
 
@@ -10,9 +17,10 @@
         </v-card-title>
         <v-card-subtitle class="text-5">Iniciar sesion con tu cuenta</v-card-subtitle>
         <v-form>
-            <v-text-field type="email" label="Email" bg-color="blue-grey-lighten-5"></v-text-field>
-            <v-text-field type="password" label="Password" bg-color="blue-grey-lighten-5"></v-text-field>
-            <v-btn block color="pink-accent-3">Iniciar Sesion</v-btn>
+            <v-text-field type="email" label="Email" bg-color="blue-grey-lighten-5" v-model="email.value.value"></v-text-field>
+            <v-text-field type="password" label="Password" bg-color="blue-grey-lighten-5" v-model="password.value.value"></v-text-field>
+            <v-btn block class="mb-5" color="pink-accent-3">Iniciar Sesion</v-btn> 
+
         </v-form>
     </v-card>
 
