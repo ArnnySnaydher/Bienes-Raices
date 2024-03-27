@@ -1,11 +1,13 @@
 <script setup>
-    import { useForm,useField } from 'vee-validate';
+import { loginSchema as validationSchema } from '../validations/loginSchema'
+import { useForm, useField } from 'vee-validate';
 
-    const  { handleSubmit, errors } = useForm();
-    const email = useField( "email" );
-    const password = useField( "password" );
-
-    console.log(email)
+const { handleSubmit } = useForm({ validationSchema });
+const email = useField("email");
+const password = useField("password");
+const submit = handleSubmit(() => {
+    console.log('Hello')
+})
 
 </script>
 
@@ -17,9 +19,11 @@
         </v-card-title>
         <v-card-subtitle class="text-5">Iniciar sesion con tu cuenta</v-card-subtitle>
         <v-form>
-            <v-text-field type="email" label="Email" bg-color="blue-grey-lighten-5" v-model="email.value.value"></v-text-field>
-            <v-text-field type="password" label="Password" bg-color="blue-grey-lighten-5" v-model="password.value.value"></v-text-field>
-            <v-btn block class="mb-5" color="pink-accent-3">Iniciar Sesion</v-btn> 
+            <v-text-field type="email" label="Email" bg-color="blue-grey-lighten-5" class="mb-3"
+                v-model="email.value.value" :error-messages="email.errorMessage.value"></v-text-field>
+            <v-text-field type="password" label="Password" bg-color="blue-grey-lighten-5" class="mb-3"
+                v-model="password.value.value" :error-messages="password.errorMessage.value"></v-text-field>
+            <v-btn block class="mb-5" color="pink-accent-3" @click="submit">Iniciar Sesion</v-btn>
 
         </v-form>
     </v-card>
