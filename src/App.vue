@@ -2,12 +2,23 @@
 
 </script>
 <template>
-  <div>
+  <v-card elevation="3" max-width="1200" class="mx-auto">
+    <v-layout>
+      <v-app-bar color="blue-darken-1">
 
-  </div>
+        <template v-slot:append>
+        </template>
+        <template v-slot:prepend>
+        </template>
+      </v-app-bar>
+
+      <v-main>
+        <v-container>
+          <RouterView></RouterView>
+        </v-container>
+      </v-main>
+
+      
+    </v-layout>
+  </v-card>
 </template>
-
-
-<style lang="scss" scoped>
-
-</style>
