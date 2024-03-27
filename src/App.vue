@@ -6,10 +6,16 @@
     <v-layout>
       <v-app-bar color="blue-darken-1">
 
-        <template v-slot:append>
-        </template>
         <template v-slot:prepend>
+          <v-btn :to="{name: 'home'}">
+            Inicio
+          </v-btn>
         </template>
+        <template v-slot:append>
+          <v-btn :to="{name: 'home'}">Inicio</v-btn>
+          <v-btn :to="{name: 'login'}">Iniciar Session</v-btn>
+        </template>
+        
       </v-app-bar>
 
       <v-main>
