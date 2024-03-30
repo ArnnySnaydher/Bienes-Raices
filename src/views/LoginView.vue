@@ -1,7 +1,7 @@
 <script setup>
 import { loginSchema as validationSchema } from '../validations/loginSchema'
 import { useForm, useField } from 'vee-validate';
-import {useAuthStore} from  "../stores/auth";
+import { useAuthStore } from "../stores/auth";
 
 
 const { handleSubmit } = useForm({ validationSchema });
@@ -22,7 +22,10 @@ const submit = handleSubmit((values) => {
             Iniciar Sesion
         </v-card-title>
         <v-card-subtitle class="text-5">Iniciar sesion con tu cuenta</v-card-subtitle>
-        <v-form>
+
+        <v-alert class="my-5" title="Alert title" type="error"></v-alert>
+
+        <v-form class="mt-5">
             <v-text-field type="email" label="Email" bg-color="blue-grey-lighten-5" class="mb-3"
                 v-model="email.value.value" :error-messages="email.errorMessage.value"></v-text-field>
             <v-text-field type="password" label="Password" bg-color="blue-grey-lighten-5" class="mb-3"
