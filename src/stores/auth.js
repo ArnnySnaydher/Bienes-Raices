@@ -1,38 +1,49 @@
-import { ref,computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { defineStore } from 'pinia'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth'
 import { useFirebaseAuth } from 'vuefire'
-
 
 export const useAuthStore = defineStore('auth', () => {
   const auth = useFirebaseAuth()
-  const authUser =ref({})
+  const authUser = ref(null)
   const errorMsg = ref('')
   const errorCode = {
     'auth/invalid-credential': 'Las credenciales son incorrectas'
   }
-  const login = ({email,password}) => {
+
+  onMounted(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        authUser.value = user
+      }
+    })
+  })
+
+  const login = ({ email, password }) => {
     signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-        // Signed in 
-        
-        authUser.value= userCredential.user;
-        console.log(authUser.value);
-        // ...
+      .then((userCredential) => {
+
+        authUser.value = userCredential.user
+        console.log(authUser.value)
+
       })
       .catch((error) => {
-        errorMsg.value = errorCode[error.code] || "Error desconocido"
-        
-      });
+        errorMsg.value = errorCode[error.code] || 'Error desconocido'
+      })
   }
 
-  const hasError= computed(()=>{
+  const hasError = computed(() => {
     return errorMsg.value
+  })
+
+  const isAuth = computed(()=>{
+    return authUser.value
   })
 
   return {
     login,
     hasError,
-    errorMsg
+    errorMsg,
+    isAuth
   }
 })
