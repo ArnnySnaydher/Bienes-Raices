@@ -23,7 +23,7 @@ const submit = handleSubmit((values) => {
         </v-card-title>
         <v-card-subtitle class="text-5">Iniciar sesion con tu cuenta</v-card-subtitle>
 
-        <v-alert class="my-5" title="Alert title" type="error"></v-alert>
+        <v-alert v-if="auth.hasError" class="my-5" :title="auth.errorMsg" type="error"></v-alert>
 
         <v-form class="mt-5">
             <v-text-field type="email" label="Email" bg-color="blue-grey-lighten-5" class="mb-3"
