@@ -1,6 +1,13 @@
 <script setup>
 import { useForm, useField } from 'vee-validate'
 import { validationSchema, imageSchema } from '@/validations/propiedadSchema'
+
+import { collection, addDoc } from 'firebase/firestore'
+import { useFirestore } from 'vuefire'
+import { useRouter } from 'vue-router'
+import router from '@/router'
+
+const db = useFirestore()
 const items = [1, 2, 3, 4, 5]
 const { handleSubmit } = useForm({
   validationSchema: {
@@ -16,9 +23,17 @@ const habitaciones = useField('habitaciones')
 const wc = useField('wc')
 const estacionamiento = useField('estacionamiento')
 const descripcion = useField('descripcion')
+const alberca = useField('alberca',null,{initialValue:false})
 
-const submit = handleSubmit((values) => {
-  console.log(values)
+const submit = handleSubmit(async (values) => {
+  const {imagen, ...propiedad} = values
+
+  const docRef = await addDoc(collection(db, 'propiedades'), 
+    ...propiedad
+  )
+  if(docRef.id){
+    router.push({name:'admin-propiedades'})
+  }
 })
 </script>
 
@@ -87,9 +102,17 @@ const submit = handleSubmit((values) => {
         v-model="descripcion.value.value"
         :error-messages="descripcion.errorMessage.value"
       ></v-textarea>
-      <v-checkbox label="Alberca"></v-checkbox>
+      <v-checkbox label="Alberca" v-model="alberca.value.value"
+        :error-messages="alberca.errorMessage.value"></v-checkbox>
 
-      <v-btn color="pink-accent-3" block @click="submit"> Agregar Propiedad </v-btn>
+      <v-btn
+        color="pink-accent-3"
+        block
+        @click="submit"
+        
+      >
+        Agregar Propiedad
+      </v-btn>
     </v-form>
   </v-card>
 </template>
