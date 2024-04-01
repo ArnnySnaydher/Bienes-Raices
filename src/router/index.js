@@ -45,31 +45,31 @@ const router = createRouter({
 //Guard de Navegacion
 
 router.beforeEach(async (to, from, next) => {
-  const requiresAuth = to.matched.some(url => url.meta.requiresAuth)
-  
-  if(requiresAuth){
+  const requiresAuth = to.matched.some((url) => url.meta.requiresAuth)
+
+  if (requiresAuth) {
     //comprobar que el usuario este autenticado
     try {
       await authenticateUser()
       next()
     } catch (error) {
       console.log(error)
-      next({name: 'login'})
+      next({ name: 'login' })
     }
-  }else{
+  } else {
     //No esta protegido, mostramos la vista
     next()
   }
 })
 
-function authenticateUser(){
+function authenticateUser() {
   const auth = useFirebaseAuth()
-  return new Promise((resolve,reject)=>{
-    const unsubscribe = onAuthStateChanged(auth,(user)=>{
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       unsubscribe()
-      if(user){
+      if (user) {
         resolve()
-      }else{
+      } else {
         reject()
       }
     })

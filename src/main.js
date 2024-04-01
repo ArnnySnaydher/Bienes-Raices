@@ -11,9 +11,7 @@ import * as directives from 'vuetify/directives'
 
 //Firebase
 import { VueFire, VueFireAuth } from 'vuefire'
-import {firebaseApp}  from './config/firebase'
-
-
+import { firebaseApp } from './config/firebase'
 
 import App from './App.vue'
 import router from './router'
@@ -25,7 +23,7 @@ const app = createApp(App)
 //vuetify
 const vuetify = createVuetify({
   components,
-  directives,
+  directives
 })
 
 app.use(VueFire, {
@@ -33,8 +31,8 @@ app.use(VueFire, {
   firebaseApp,
   modules: [
     // we will see other modules later on
-    VueFireAuth(),
-  ],
+    VueFireAuth()
+  ]
 })
 app.use(createPinia())
 app.use(router)
