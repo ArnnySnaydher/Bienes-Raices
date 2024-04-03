@@ -5,9 +5,14 @@ import { validationSchema, imageSchema } from '@/validations/propiedadSchema'
 import { collection, addDoc } from 'firebase/firestore'
 import { useFirestore } from 'vuefire'
 import { useRouter } from 'vue-router'
-import router from '@/router'
 
+import useImage from '@/composables/useImage'
+
+const {uploadImage} = useImage()
+
+const router = useRouter()
 const db = useFirestore()
+
 const items = [1, 2, 3, 4, 5]
 const { handleSubmit } = useForm({
   validationSchema: {
@@ -23,13 +28,14 @@ const habitaciones = useField('habitaciones')
 const wc = useField('wc')
 const estacionamiento = useField('estacionamiento')
 const descripcion = useField('descripcion')
-const alberca = useField('alberca',null,{initialValue:false})
+const piscina = useField('piscina',null,{initialValue:false})
 
-const submit = handleSubmit(async (values) => {
+const submit = handleSubmit( async (values) => {
   const {imagen, ...propiedad} = values
 
+  //GEneracion de Collection "propiedades"
   const docRef = await addDoc(collection(db, 'propiedades'), 
-    ...propiedad
+    propiedad
   )
   if(docRef.id){
     router.push({name:'admin-propiedades'})
@@ -58,6 +64,7 @@ const submit = handleSubmit(async (values) => {
         class="mb-5"
         v-model="imagen.value.value"
         :error-messages="imagen.errorMessage.value"
+        @change="uploadImage"
       ></v-file-input>
 
       <v-text-field
@@ -102,8 +109,8 @@ const submit = handleSubmit(async (values) => {
         v-model="descripcion.value.value"
         :error-messages="descripcion.errorMessage.value"
       ></v-textarea>
-      <v-checkbox label="Alberca" v-model="alberca.value.value"
-        :error-messages="alberca.errorMessage.value"></v-checkbox>
+      <v-checkbox label="Piscina" v-model="piscina.value.value"
+        :error-messages="piscina.errorMessage.value"></v-checkbox>
 
       <v-btn
         color="pink-accent-3"
