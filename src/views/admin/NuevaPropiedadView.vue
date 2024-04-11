@@ -6,11 +6,12 @@ import { useFirestore } from 'vuefire'
 import { useRouter } from 'vue-router'
 import useImage from '@/composables/useImage'
 import "leaflet/dist/leaflet.css";
-import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet";
-import {ref}  from "vue"
+import { LMap, LTileLayer,LMarker } from "@vue-leaflet/vue-leaflet";
+import useLocationMap  from '@/composables/useLocationMap'
 
 const {uploadImage,image,url} = useImage()
-const zoom = ref(50)
+const {zoom,center,pin} = useLocationMap()
+
 const router = useRouter()
 const db = useFirestore()
 
@@ -33,12 +34,13 @@ const piscina = useField('piscina',null,{initialValue:false})
 
 const submit = handleSubmit( async (values) => {
   const {imagen, ...propiedad} = values
-
+  console.log(center.value)
   //GEneracion de Collection "propiedades"
   const docRef = await addDoc(collection(db, 'propiedades'), 
     {
       ...propiedad,
-      imagen : url.value
+      imagen : url.value,
+      ubicacion : center.value
     }
   )
   if(docRef.id){
@@ -120,16 +122,23 @@ const submit = handleSubmit( async (values) => {
       <v-checkbox label="Piscina" v-model="piscina.value.value"
         :error-messages="piscina.errorMessage.value"></v-checkbox>
 
-      <div style="height:600px; width:800px">
-        <l-map ref="map" v-model:zoom="zoom" :center="[47.41322, -1.219482]" :useGlobalLeaflet="false">
-          <l-tile-layer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            layer-type="base"
-            name="OpenStreetMap"
-          >
-          </l-tile-layer>
-        </l-map>
+      <h2 class="font-weight-bold text-center my-5">Ubicación</h2>
+      <div class="pb-10">
+        <div style="height:600px">
+          <LMap 
+          v-model:zoom="zoom" 
+          :center="center" 
+          :useGlobalLeaflet="false">
+            <LMarker :lat-lng="center" draggable @moveend="pin">
+            </LMarker>
+            <LTileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            >
+            </LTileLayer>
+          </LMap>
+        </div>
       </div>
+      
       
 
       <v-btn
