@@ -8,7 +8,7 @@ import { useRouter } from 'vue-router'
 
 import useImage from '@/composables/useImage'
 
-const {uploadImage} = useImage()
+const {uploadImage,image,url} = useImage()
 
 const router = useRouter()
 const db = useFirestore()
@@ -35,7 +35,10 @@ const submit = handleSubmit( async (values) => {
 
   //GEneracion de Collection "propiedades"
   const docRef = await addDoc(collection(db, 'propiedades'), 
-    propiedad
+    {
+      ...propiedad,
+      imagen : url.value
+    }
   )
   if(docRef.id){
     router.push({name:'admin-propiedades'})
@@ -66,6 +69,10 @@ const submit = handleSubmit( async (values) => {
         :error-messages="imagen.errorMessage.value"
         @change="uploadImage"
       ></v-file-input>
+      <div v-if="image">
+        <p class="font-weight-bold">Imagen Propiedad:</p>
+        <img class="w-50" :src="image">
+      </div>
 
       <v-text-field
         class="mb-5"
