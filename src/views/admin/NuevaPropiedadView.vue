@@ -1,15 +1,16 @@
 <script setup>
 import { useForm, useField } from 'vee-validate'
 import { validationSchema, imageSchema } from '@/validations/propiedadSchema'
-
 import { collection, addDoc } from 'firebase/firestore'
 import { useFirestore } from 'vuefire'
 import { useRouter } from 'vue-router'
-
 import useImage from '@/composables/useImage'
+import "leaflet/dist/leaflet.css";
+import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet";
+import {ref}  from "vue"
 
 const {uploadImage,image,url} = useImage()
-
+const zoom = ref(50)
 const router = useRouter()
 const db = useFirestore()
 
@@ -118,6 +119,18 @@ const submit = handleSubmit( async (values) => {
       ></v-textarea>
       <v-checkbox label="Piscina" v-model="piscina.value.value"
         :error-messages="piscina.errorMessage.value"></v-checkbox>
+
+      <div style="height:600px; width:800px">
+        <l-map ref="map" v-model:zoom="zoom" :center="[47.41322, -1.219482]" :useGlobalLeaflet="false">
+          <l-tile-layer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            layer-type="base"
+            name="OpenStreetMap"
+          >
+          </l-tile-layer>
+        </l-map>
+      </div>
+      
 
       <v-btn
         color="pink-accent-3"
