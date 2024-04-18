@@ -29,7 +29,7 @@ const habitaciones = useField('habitaciones')
 const wc = useField('wc')
 const estacionamiento = useField('estacionamiento')
 const descripcion = useField('descripcion')
-const alberca = useField('alberca')
+const piscina = useField('piscina')
 
 const route = useRoute();
 
@@ -44,12 +44,13 @@ watch(propiedad, (propiedad) => {
       wc.value.value = propiedad.wc
       estacionamiento.value.value = propiedad.estacionamiento
       descripcion.value.value = propiedad.descripcion
-      alberca.value.value = propiedad.alberca
+      piscina.value.value = propiedad.piscina
       center.value = propiedad.ubicacion
   })
 
 const submit = handleSubmit(values =>{
   //
+  console.log(values)
 })
 </script>
 
@@ -82,6 +83,8 @@ const submit = handleSubmit(values =>{
 
             <div class="my-5">
                 <p class="font-weight-bold">Imagen Actual:</p>
+                <img v-if="image" class="w-50" :src="image" alt="">
+                <img v-else class="w-50" :src="propiedad?.imagen" alt="">
             </div>
 
 
@@ -141,8 +144,8 @@ const submit = handleSubmit(values =>{
             ></v-textarea>
 
             <v-checkbox 
-                v-model="alberca.value.value"
-                label="Alberca"
+                v-model="piscina.value.value"
+                label="Piscina"
             ></v-checkbox>
 
 
