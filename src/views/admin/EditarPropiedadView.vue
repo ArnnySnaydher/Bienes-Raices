@@ -1,6 +1,6 @@
 <script setup>
 import { watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute,useRouter } from 'vue-router';
 import { useFirestore,useDocument } from 'vuefire';
 import { doc,updateDoc } from 'firebase/firestore';
 
@@ -14,6 +14,7 @@ import {
 import useImage from '@/composables/useImage'
 import useLocationMap from '@/composables/useLocationMap'
 import { validationSchema } from '@/validations/propiedadSchema'
+
 
 const items = [1,2,3,4,5]
 
@@ -32,10 +33,12 @@ const descripcion = useField('descripcion')
 const piscina = useField('piscina')
 
 const route = useRoute();
+const router = useRouter();
 
 //Obtener la propiedad a editar
 const db=useFirestore();
-const propiedad=useDocument(doc(db,'propiedades',route.params.id));
+const docRef = doc(db, "propiedades", route.params.id);
+const propiedad=useDocument(docRef);
 
 watch(propiedad, (propiedad) => {
       titulo.value.value = propiedad.titulo
@@ -48,9 +51,19 @@ watch(propiedad, (propiedad) => {
       center.value = propiedad.ubicacion
   })
 
-const submit = handleSubmit(values =>{
-  //
-  console.log(values)
+const submit = handleSubmit(async values =>{
+  const {imagen,...propiedad}=values
+  if(image.value){
+    console.log("Hay imagen nueva")
+  }else{
+    const data={
+      ...propiedad,
+      ubicacion:center.value
+    }
+    await updateDoc(docRef,data)
+   
+  }
+  router.push({name:"admin-propiedades"})
 })
 </script>
 
