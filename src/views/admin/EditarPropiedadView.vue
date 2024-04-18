@@ -1,4 +1,16 @@
-<script setup></script>
+<script setup>
+import { useRoute } from 'vue-router';
+import { useFirestore,useDocument } from 'vuefire';
+import { doc,updateDoc } from 'firebase/firestore';
+
+const route = useRoute();
+
+//Obtener la propiedad a editar
+const db=useFirestore();
+const property=useDocument(doc(db,'propiedades',route.params.id));
+
+console.log(property)
+</script>
 
 <template>
   <h2 class="text-center text-h3 my-5 font-weight-bold">Editar Propiedad</h2>
