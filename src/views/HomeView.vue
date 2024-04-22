@@ -2,7 +2,7 @@
   import usePropiedades from '@/composables/usePropiedades';
   import Propiedad from '@/components/Propiedad.vue';
 
-  const { propiedadesCollection}=usePropiedades();
+  const { propiedadesCollection,propertyPrice}=usePropiedades();
 </script>
 
 <template>
@@ -11,7 +11,7 @@
   <v-card flat class="py-10">
     <v-row>
       <Propiedad v-for="propiedad in propiedadesCollection" :key="propiedad.id"
-        :propiedad="propiedad">
+        :propiedad="propiedad" :price="propertyPrice">
         
       </Propiedad>
     </v-row>
